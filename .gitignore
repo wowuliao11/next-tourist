@@ -1,0 +1,4 @@
+# nextjs gitignore
+node_modules
+.next
+out
