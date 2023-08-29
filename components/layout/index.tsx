@@ -21,18 +21,20 @@ export default function Layout({
   children, // will be a page or nested layout
 }: Props) {
   const [show, setShow] = useState(false);
-  const defaultContent = "somethings";
+  const widthStr = Number((1 / 6) * 100).toString() + "%";
 
   const style = {
-    width: show ? "0" : "100%",
+    width: !show ? widthStr : "0%",
   };
+  const defaultContent = "somethings";
+
   return (
-    <div className="grid grid-flow-row grid-rows-6 grid-cols-5 gap-4 h-screen purple-dark text-foreground bg-background">
+    <div className="h-screen purple-dark text-foreground bg-background flex overflow-auto">
       <div
-        className="col-span-full row-span-6 md:row-span-6 md:col-span-1 grid grid-flow-row grid-rows-6 grid-cols-5 ease-in-out duration-100 overflow-hidden"
+        className="fixed top-0 left-0 grid grid-flow-row grid-rows-6 grid-cols-5 md:w-1/6 purple-dark text-foreground bg-background ease-in-out duration-500"
         style={style}
       >
-        <div className="col-span-5 row-span-1 grid grid-rows-3 grid-cols-5">
+        <div className="col-span-5 row-span-1 grid grid-rows-3 grid-cols-5 flex-none">
           <User
             className="col-start-2 col-span-3 row-span-full"
             name="Junior Garcia"
@@ -56,7 +58,12 @@ export default function Layout({
         </div>
         <div className="col-span-5">
           <Accordion className="">
-            <AccordionItem key="1" aria-label="Accordion 1" title="Accordion 1">
+            <AccordionItem
+              key="1"
+              aria-label="Accordion 1"
+              title="Accordion 1"
+              className=" transition-width duration-500"
+            >
               {defaultContent}
             </AccordionItem>
             <AccordionItem key="2" aria-label="Accordion 2" title="Accordion 2">
@@ -68,7 +75,7 @@ export default function Layout({
           </Accordion>
         </div>
       </div>
-      <div className="col-span-5 md:col-span-4">
+      <div className="fixed w-full h-10">
         <Navbar className="">
           <NavbarBrand>
             <FontAwesomeIcon
@@ -109,9 +116,7 @@ export default function Layout({
           </NavbarContent>
         </Navbar>
       </div>
-      <div className="col-span-5 row-auto md:col-span-4 md:row-span-5">
-        {children}
-      </div>
+      <div className="p-">{children}</div>
     </div>
   );
 }
