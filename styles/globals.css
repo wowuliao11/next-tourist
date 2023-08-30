@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .transition-visibility {
+        transition: visibility 200ms linear, opacity 200ms linear;
+    }
+}

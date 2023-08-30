@@ -13,30 +13,64 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { findIconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 interface Props {
   children: React.ReactNode;
 }
 export default function Layout({
   children, // will be a page or nested layout
 }: Props) {
-  const [show, setShow] = useState(false);
-  const widthStr = Number((1 / 6) * 100).toString() + "%";
+  const [show, setShow] = useState(true);
+  const widthStr = Number((1 / 5) * 100).toString() + "%";
 
-  const style = {
-    width: !show ? widthStr : "0%",
+  const widthStyle = {
+    width: show ? widthStr : "0%",
   };
+  const displayStyle: any = {
+    opacity: show ? 1 : 0,
+    visibility: show ? "visible" : "hidden",
+  };
+  const blurClasses = show ? " brightness-50 " : "";
   const defaultContent = "somethings";
 
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  useEffect(() => {
+    console.log("useEffect");
+    function handleClickOutside(event) {
+      console.log(
+        svgRef.current?.contains(event.target),
+        svgRef.current !== event.target
+      );
+      if (
+        !svgRef.current?.contains(event.target) &&
+        show &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        setShow(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarRef]);
+
   return (
-    <div className="h-screen purple-dark text-foreground bg-background flex overflow-auto">
+    <div className="purple-dark text-foreground bg-background flex">
       <div
-        className="fixed top-0 left-0 grid grid-flow-row grid-rows-6 grid-cols-5 md:w-1/6 purple-dark text-foreground bg-background ease-in-out duration-500"
-        style={style}
+        className="fixed z-50 top-0 left-0 md:w-1/6 ease-in-out duration-500 flex flex-col h-screen text-foreground bg-cyan-950"
+        style={widthStyle}
+        ref={sidebarRef}
       >
-        <div className="col-span-5 row-span-1 grid grid-rows-3 grid-cols-5 flex-none">
+        <div
+          className="w-1/5 flex justify-between pb-2 pt-3 transition-visibility"
+          style={displayStyle}
+        >
           <User
-            className="col-start-2 col-span-3 row-span-full"
+            className="pl-3"
             name="Junior Garcia"
             description={
               <Link href="#" size="sm" isExternal>
@@ -47,38 +81,38 @@ export default function Layout({
               src: "https://avatars.githubusercontent.com/u/30373425?v=4",
             }}
           />
-          <div className="col-start-5 col-span-1 row-start-2 row-span-1 flex justify-end">
+          <div className="">
             <FontAwesomeIcon
               icon={findIconDefinition(faBars)}
               className="hover:-rotate-90 cursor-pointer duration-500"
             />
           </div>
-
-          <Divider />
         </div>
-        <div className="col-span-5">
-          <Accordion className="">
-            <AccordionItem
-              key="1"
-              aria-label="Accordion 1"
-              title="Accordion 1"
-              className=" transition-width duration-500"
-            >
-              {defaultContent}
+
+        <Divider />
+
+        <div
+          className="whitespace-nowrap transition-visibility"
+          style={displayStyle}
+        >
+          <Accordion>
+            <AccordionItem key="1" aria-label="Accordion 1" title="Accordion 1">
+              <div className="overflow-hidden">{defaultContent}</div>
             </AccordionItem>
             <AccordionItem key="2" aria-label="Accordion 2" title="Accordion 2">
-              {defaultContent}
+              <div className="overflow-hidden">{defaultContent}</div>
             </AccordionItem>
             <AccordionItem key="3" aria-label="Accordion 3" title="Accordion 3">
-              {defaultContent}
+              <div className="overflow-hidden">{defaultContent}</div>
             </AccordionItem>
           </Accordion>
         </div>
       </div>
-      <div className="fixed w-full h-10">
+      <div className={"fixed z-30 w-full h-10 flex"}>
         <Navbar className="">
-          <NavbarBrand>
+          <NavbarBrand className="pl-40">
             <FontAwesomeIcon
+              ref={svgRef}
               size="lg"
               icon={findIconDefinition(faBars)}
               className="hover:-rotate-90 cursor-pointer duration-500"
@@ -116,7 +150,9 @@ export default function Layout({
           </NavbarContent>
         </Navbar>
       </div>
-      <div className="p-">{children}</div>
+      <div className={"flex justify-center top-10 w-full" + blurClasses}>
+        {children}
+      </div>
     </div>
   );
 }
