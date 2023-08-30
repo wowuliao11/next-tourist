@@ -59,7 +59,7 @@ export default function Layout({
   }, [sidebarRef]);
 
   return (
-    <div className="purple-dark text-foreground bg-background flex">
+    <div className="purple-dark text-foreground bg-background flex relative">
       <div
         className="fixed z-50 top-0 left-0 md:w-1/6 ease-in-out duration-500 flex flex-col h-screen text-foreground bg-cyan-950"
         style={widthStyle}
@@ -150,7 +150,7 @@ export default function Layout({
           </NavbarContent>
         </Navbar>
       </div>
-      <div className={"flex justify-center top-10 w-full" + blurClasses}>
+      <div className={"flex justify-center mt-10 w-full" + blurClasses}>
         {children}
       </div>
     </div>
