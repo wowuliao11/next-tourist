@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { findIconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
+import WhaleIcon from "@/static/icons/whale";
 interface Props {
   children: React.ReactNode;
 }
@@ -36,7 +37,6 @@ export default function Layout({
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   useEffect(() => {
-    console.log("useEffect");
     function handleClickOutside(event) {
       console.log(
         svgRef.current?.contains(event.target),
@@ -61,12 +61,12 @@ export default function Layout({
   return (
     <div className="purple-dark text-foreground bg-background flex relative">
       <div
-        className="fixed z-50 top-0 left-0 md:w-1/6 ease-in-out duration-500 flex flex-col h-screen text-foreground bg-cyan-950"
+        className="fixed z-50 top-0 left-0 md:w-1/6 ease-in-out duration-500 flex flex-col h-screen text-foreground bg-cyan-950 shadow-xl"
         style={widthStyle}
         ref={sidebarRef}
       >
         <div
-          className="w-1/5 flex justify-between pb-2 pt-3 transition-visibility"
+          className="w-full flex justify-between pb-2 pr-3 pt-3 transition-visibility"
           style={displayStyle}
         >
           <User
@@ -85,6 +85,7 @@ export default function Layout({
             <FontAwesomeIcon
               icon={findIconDefinition(faBars)}
               className="hover:-rotate-90 cursor-pointer duration-500"
+              onClick={() => setShow(!show)}
             />
           </div>
         </div>
@@ -110,7 +111,7 @@ export default function Layout({
       </div>
       <div className={"fixed z-30 w-full h-10 flex"}>
         <Navbar className="">
-          <NavbarBrand className="pl-40">
+          <NavbarBrand className="pl-40 flex">
             <FontAwesomeIcon
               ref={svgRef}
               size="lg"
@@ -119,7 +120,9 @@ export default function Layout({
               onClick={() => setShow(!show)}
             />
             <Divider orientation="vertical" />
-            <p className="font-bold text-inherit">ACME</p>
+            <div className=" w-1/4">
+              <WhaleIcon />
+            </div>
           </NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-4" justify="center">
             <NavbarItem>
