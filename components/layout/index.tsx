@@ -146,7 +146,7 @@ export default function Layout({
               <Link href="#">Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="primary" href="#" variant="flat">
+              <Button as={Link} color="primary" variant="ghost" href="#">
                 Sign Up
               </Button>
             </NavbarItem>
